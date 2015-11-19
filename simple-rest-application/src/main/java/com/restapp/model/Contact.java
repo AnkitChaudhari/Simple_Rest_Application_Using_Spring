@@ -1,9 +1,18 @@
 package com.restapp.model;
 
 public class Contact {
+	private Integer id;
 	private String name;
 	private String email;
 	private String number;
+	
+	
+	public Integer getId() {
+		return id;
+	}
+	public void setId(Integer id) {
+		this.id = id;
+	}
 	public String getName() {
 		return name;
 	}

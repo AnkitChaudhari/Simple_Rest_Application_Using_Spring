@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
-    pageEncoding="ISO-8859-1"%>
+	pageEncoding="ISO-8859-1"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html ng-app="myRestApp">
 <head>
@@ -15,25 +15,46 @@
 
 </head>
 <body ng-controller="myRestCtrl">
-<div align="center"><h3><b>Welcome To Contact List Management System</b></h3></div><br>
-<div class="container">
-<table class="table">
-<thead>
-<tr>
-<th>Name</th>
-<th>Email</th>
-<th>Contact Details</th>
-</tr>
-</thead>
-<tbody>
-<tr ng-repeat="contact in contactlist">
-<td>{{contact.name}}</td>
-<td>{{contact.email}}</td>
-<td>{{contact.number}}</td>
-</tr>
-</tbody>
-</table>
-</div>
+	<div align="center">
+		<h2>
+			<b>Welcome To Contact List Management System</b>
+		</h2>
+	</div>
+	<br>
+	<div class="container">
+		<table class="table">
+			<thead align="center">
+				<tr>
+					<th style="text-align: center;">Name</th>
+					<th style="text-align: center;">Email</th>
+					<th style="text-align: center;">Contact Details</th>
+					<th colspan="2" style="text-align: center;">Actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr align="center">
+					<td><input class="form-control" ng-model="contact.name" data-toggle="tooltip" title="Enter First Name and Last Name Seperated By Space"></td>
+					<td><input class="form-control" ng-model="contact.email" data-toggle="tooltip" title="Enter Email Id"></td>
+					<td><input class="form-control" ng-model="contact.number" data-toggle="tooltip" title="Enter Phone Number"></td>
+					<td><button class="btn btn-success" ng-click="addContact()">Add
+							New Contact</button></td>
+					<td><button class="btn btn-primary" ng-click="updateContact()">Update
+							Contact</button></td>
+					<td><button class="btn btn-warning" ng-click="clear()">
+							Clear</button></td>
+				</tr>
+				<tr ng-repeat="contact in contactlist" align="center">
+					<td>{{contact.name}}</td>
+					<td>{{contact.email}}</td>
+					<td>{{contact.number}}</td>
+					<td><button class="btn btn-danger"
+							ng-click="deleteContact(contact.id)">Delete Contact</button></td>
+					<td><button class="btn btn-info"
+							ng-click="editContact(contact.id)">Edit Contact</button></td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 
 </body>
 </html>
