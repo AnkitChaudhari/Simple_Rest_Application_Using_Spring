@@ -7,13 +7,13 @@ import com.restapp.exception.ContactsException;
 
 public interface ContactDao {
 	
-	public List<UserContact> getAllContacts();
+	public List<UserContact> getAllContacts() throws ContactsException;
 	
-	public boolean addContact(UserContact contact);
+	public void addContact(UserContact contact) throws ContactsException;
 	
-	public boolean deleteContact(Integer id);
+	public void deleteContact(Integer id) throws ContactsException;
 	
 	public UserContact getContactById(Integer id) throws ContactsException;
 	
-	public boolean updateContact(UserContact contact);
+	public void updateContact(UserContact contact) throws ContactsException;
 }

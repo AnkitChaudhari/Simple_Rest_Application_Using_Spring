@@ -5,6 +5,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.restapp.common.ErrorCode;
 import com.restapp.dao.ContactDao;
 import com.restapp.entities.UserContact;
 import com.restapp.exception.ContactsException;
@@ -16,7 +17,7 @@ public class ContactServiceImpl implements ContactService {
 	@Autowired
 	private ContactDao contactDaoImpl;
 
-	public List<Contact> getAllContacts() {
+	public List<Contact> getAllContacts() throws ContactsException {
 		List<UserContact> contacts = contactDaoImpl.getAllContacts();
 		List<Contact> contactList = new ArrayList<Contact>();
 		for (UserContact contact : contacts) {
@@ -30,55 +31,39 @@ public class ContactServiceImpl implements ContactService {
 		return contactList;
 	}
 
-	public boolean addContact(Contact contact) {
+	public void addContact(Contact contact) throws ContactsException {
 
-		boolean status = false;
-		try {
 			UserContact userContact = new UserContact();
 			String[] name = contact.getName().split(" ");
 			userContact.setEmail(contact.getEmail());
 			userContact.setFirstName(name[0]);
 			userContact.setLastName(name[1]);
 			userContact.setMobile(contact.getNumber());
-			status = contactDaoImpl.addContact(userContact);
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-		return status;
+			contactDaoImpl.addContact(userContact);
 	}
 
-	public boolean deleteContact(Integer id) {
-		boolean status = false;
-		try {
-			status = contactDaoImpl.deleteContact(id);
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-		return false;
+	public void deleteContact(Integer id) throws ContactsException {
+		contactDaoImpl.deleteContact(id);
 	}
 
 	@Override
-	public Contact getContactById(Integer id) throws ContactsException{
+	public Contact getContactById(Integer id) throws ContactsException {
 		Contact contact = null;
-		try {
-			UserContact userContact = contactDaoImpl.getContactById(id);
-			contact = new Contact();
-			contact.setId(userContact.getId());
-			contact.setEmail(userContact.getEmail());
-			contact.setName(userContact.getFirstName() + " "
-					+ userContact.getLastName());
-			contact.setNumber(userContact.getMobile());
-		} catch (Exception exception) {
-			exception.printStackTrace();
-			if(exception instanceof ContactsException)
-				throw exception;
+		UserContact userContact = contactDaoImpl.getContactById(id);
+		if (userContact == null) {
+			throw new ContactsException(ErrorCode.CONTACT_NOT_FOUND);
 		}
+		contact = new Contact();
+		contact.setId(userContact.getId());
+		contact.setEmail(userContact.getEmail());
+		contact.setName(userContact.getFirstName() + " "
+				+ userContact.getLastName());
+		contact.setNumber(userContact.getMobile());
 		return contact;
 	}
 
 	@Override
-	public boolean updateContact(Contact contact) {
-		try {
+	public void updateContact(Contact contact) throws ContactsException {
 			UserContact userContact = new UserContact();
 			userContact.setEmail(contact.getEmail());
 			userContact.setId(contact.getId());
@@ -86,10 +71,6 @@ public class ContactServiceImpl implements ContactService {
 			String[] name = contact.getName().split(" ");
 			userContact.setFirstName(name[0]);
 			userContact.setLastName(name[1]);
-			return contactDaoImpl.updateContact(userContact);
-		} catch (Exception exception) {
-			exception.printStackTrace();
-		}
-		return false;
+			contactDaoImpl.updateContact(userContact);
 	}
 }

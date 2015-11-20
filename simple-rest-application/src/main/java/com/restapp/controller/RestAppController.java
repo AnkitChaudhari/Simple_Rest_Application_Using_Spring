@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.ModelAndView;
 
+import com.restapp.common.ErrorCode;
 import com.restapp.common.ResponseHeaderCode;
 import com.restapp.common.ResponseHeaderMessage;
 import com.restapp.exception.ContactsException;
@@ -32,49 +33,32 @@ public class RestAppController {
 	}
 
 	@RequestMapping(value = "/getContacts", method = RequestMethod.GET)
-	public ContactResponse getAllContacts() {
+	public ContactResponse getAllContacts() throws ContactsException {
 		List<Contact> contacts = contactServiceImpl.getAllContacts();
 		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, contacts);
 	}
 
 	@RequestMapping(value = "/addContact", method = RequestMethod.POST)
-	public ContactResponse addContact(@RequestBody Contact contact) {
-		if(contactServiceImpl.addContact(contact))
-			return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
-		else
-			return ResponseGenerator.generateResponse(ResponseHeaderCode.FAILURE, ResponseHeaderMessage.FAILURE, null);
+	public ContactResponse addContact(@RequestBody Contact contact) throws ContactsException {
+		contactServiceImpl.addContact(contact);
+		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
 	}
 
 	@RequestMapping(value = "/deleteContact/{id}", method = RequestMethod.DELETE)
-	public ContactResponse deleteContact(@PathVariable Integer id) {
-		if(contactServiceImpl.deleteContact(id))
-			return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
-		else
-			return ResponseGenerator.generateResponse(ResponseHeaderCode.FAILURE, ResponseHeaderMessage.FAILURE, null);
+	public ContactResponse deleteContact(@PathVariable Integer id) throws ContactsException {
+		contactServiceImpl.deleteContact(id);
+		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
 	}
 
 	@RequestMapping(value = "/editContact/{id}", method = RequestMethod.PUT)
-	public ContactResponse editContact(@PathVariable Integer id) {
-		ContactResponse response=null;
-		try {
-			Contact contact= contactServiceImpl.getContactById(id);
-			response=ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, contact);
-		} catch (ContactsException e) {
-			e.printStackTrace();
-			response=ResponseGenerator.generateResponse(ResponseHeaderCode.FAILURE, ResponseHeaderMessage.FAILURE, e.getErrorCode().getMessage());
-		}
-		finally{
-			return response;	
-		}
-		
-		
+	public ContactResponse editContact(@PathVariable Integer id) throws ContactsException {
+		Contact contact= contactServiceImpl.getContactById(id);
+		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, contact);		
 	}
 
 	@RequestMapping(value = "/updateContact", method = RequestMethod.POST)
-	public ContactResponse updateContact(@RequestBody Contact contact) {
-		if(contactServiceImpl.updateContact(contact))
-			return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
-		else
-			return ResponseGenerator.generateResponse(ResponseHeaderCode.FAILURE, ResponseHeaderMessage.FAILURE, null);
+	public ContactResponse updateContact(@RequestBody Contact contact) throws ContactsException {
+		contactServiceImpl.updateContact(contact);
+		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
 	}
 }

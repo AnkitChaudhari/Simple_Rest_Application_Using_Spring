@@ -7,13 +7,13 @@ import com.restapp.model.Contact;
 
 public interface ContactService {
 	
-	public List<Contact> getAllContacts();
+	public List<Contact> getAllContacts() throws ContactsException;
 	
-	public boolean addContact(Contact contact);
+	public void addContact(Contact contact) throws ContactsException;
 	
-	public boolean deleteContact(Integer id);
+	public void deleteContact(Integer id) throws ContactsException;
 	
 	public Contact getContactById(Integer id) throws ContactsException;
 	
-	public boolean updateContact(Contact contact);
+	public void updateContact(Contact contact) throws ContactsException;
 }
