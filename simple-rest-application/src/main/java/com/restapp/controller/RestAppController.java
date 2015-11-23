@@ -19,6 +19,7 @@ import com.restapp.exception.ContactsException;
 import com.restapp.model.Contact;
 import com.restapp.model.ContactResponse;
 import com.restapp.service.impl.ContactServiceImpl;
+import com.restapp.util.RequestValidator;
 import com.restapp.util.ResponseGenerator;
 
 @RestController
@@ -40,24 +41,30 @@ public class RestAppController {
 
 	@RequestMapping(value = "/addContact", method = RequestMethod.POST)
 	public ContactResponse addContact(@RequestBody Contact contact) throws ContactsException {
+		RequestValidator.validateContactForAdd(contact);			
 		contactServiceImpl.addContact(contact);
 		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
 	}
 
 	@RequestMapping(value = "/deleteContact/{id}", method = RequestMethod.DELETE)
 	public ContactResponse deleteContact(@PathVariable Integer id) throws ContactsException {
+		if(id==null)
+			throw new ContactsException(ErrorCode.ID_NOT_VALID);
 		contactServiceImpl.deleteContact(id);
 		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
 	}
 
 	@RequestMapping(value = "/editContact/{id}", method = RequestMethod.PUT)
 	public ContactResponse editContact(@PathVariable Integer id) throws ContactsException {
+		if(id==null)
+			throw new ContactsException(ErrorCode.ID_NOT_VALID);
 		Contact contact= contactServiceImpl.getContactById(id);
 		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, contact);		
 	}
 
 	@RequestMapping(value = "/updateContact", method = RequestMethod.POST)
 	public ContactResponse updateContact(@RequestBody Contact contact) throws ContactsException {
+		RequestValidator.validateContactForUpdate(contact);
 		contactServiceImpl.updateContact(contact);
 		return ResponseGenerator.generateResponse(ResponseHeaderCode.SUCCESS, ResponseHeaderMessage.SUCCESS, null);
 	}

@@ -7,6 +7,9 @@
 <title>Contact List</title>
 <script src="resources/js/angular.min.js"></script>
 <script src="resources/js/controller.js"></script>
+<script src="resources/js/jquery-1.11.3.min.js"></script>
+<script src="resources/js/bootstrap.min.js"></script>
+
 <!-- Latest compiled and minified CSS -->
 <link rel="stylesheet" href="resources/css/css/bootstrap.min.css">
 
@@ -15,11 +18,34 @@
 
 </head>
 <body ng-controller="myRestCtrl">
+
+<!-- Modal -->
+  <div class="modal fade" id="myModal" role="dialog">
+    <div class="modal-dialog">
+    
+      <!-- Modal content-->
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal">&times;</button>
+          <h4 class="modal-title">{{modalHeader}}</h4>
+        </div>
+        <div class="modal-body">
+          <p>{{modalContent}}</p>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+
 	<div align="center">
 		<h2>
 			<b>Welcome To Contact List Management System</b>
 		</h2>
 	</div>
+	
 	<br>
 	<div class="container">
 		<table class="table">
